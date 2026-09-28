@@ -286,6 +286,70 @@ class BillingService {
 };
 
 
+// ============================================================================
+// MEMBER 1 (LEADER): GUI Integration & Main Application — COMPLETED
+// ============================================================================
+// This is the presentation layer. It connects all the backend stuff
+// to a professional dark-theme interface using Qt6 Widgets.
+//
+// Files: main.cpp, mainwindow.cpp, mainwindow.h
+//
+// What we built:
+//   - Login page with username/password auth
+//   - Role-based dashboard (Admin sees all tabs, Receptionist sees some, etc.)
+//   - Customers & Vehicles panel: register, search, view in tables
+//   - Appointments panel: schedule, update status, filter by status
+//   - Work Orders panel: create, assign mechanic, update status
+//   - Inventory panel: add parts, update stock, log usage on orders
+//   - Billing panel: calculate bill from parts, process Cash/Card payment
+//   - Admin panel: create new users, view revenue reports
+//   - Professional dark theme with color-coded buttons
+//   - Error/success messages for every database operation
+//   - Tables refresh automatically after add/update/delete
+//
+// Key classes and methods:
+//   MainWindow::setupLoginUI()          — builds the login page
+//   MainWindow::setupDashboardUI()     — builds the dashboard with tabs
+//   MainWindow::configureRoleDashboard() — shows tabs based on user role
+//   MainWindow::handleLogin()          — authenticates user
+//   MainWindow::handleLogout()          — logs out and returns to login
+//   MainWindow::createCustomersPanel() — customers & vehicles tab
+//   MainWindow::createAppointmentsPanel() — appointments tab
+//   MainWindow::createServiceOrdersPanel() — work orders tab
+//   MainWindow::createInventoryPanel() — inventory tab
+//   MainWindow::createBillingPanel()   — billing tab
+//   MainWindow::createAdminPanel()     — admin tab
+//   MainWindow::refreshCustomersTable() — reloads customer data
+//   MainWindow::refreshVehiclesTable()  — reloads vehicle data
+//   MainWindow::refreshAppointmentsTable() — reloads appointment data
+//   MainWindow::refreshServiceOrdersTable() — reloads order data
+//   MainWindow::refreshPartsTable()      — reloads inventory data
+//   MainWindow::refreshUsersTable()      — reloads user data
+//   MainWindow::populateCustomerCombo()  — fills customer dropdown
+//   MainWindow::populateVehicleCombo()   — fills vehicle dropdown
+//   MainWindow::populateMechanicCombo()  — fills mechanic dropdown
+//   MainWindow::populatePartCombo()      — fills part dropdown
+//   MainWindow::populateOrderCombo()     — fills order dropdown
+//
+// Design decisions:
+//   - QStackedWidget to switch between login and dashboard pages
+//   - QTabWidget for role-based tab navigation
+//   - QSS stylesheets for the dark theme (no external files needed)
+//   - Lambda functions for button handlers (keeps code close to UI)
+//   - QMessageBox for error/success/confirmation dialogs
+//   - Color-coded buttons: blue (default), green (success), orange (warning),
+//     purple (special), red (danger)
+//
+// The flow is:
+//   1. User enters credentials on login page
+//   2. UserRepository.authenticate() checks against database
+//   3. UserFactory creates the right user type (Admin/Receptionist/Mechanic)
+//   4. configureRoleDashboard() shows only the tabs that role can access
+//   5. Each panel loads data from the database on creation
+//   6. After any add/update, the table refreshes automatically
+//   7. Logout returns to login page and clears the current user
+
+
 #endif // VEHICLE_SERVICE_CENTER_HPP
 
 // ============================================================================
