@@ -222,6 +222,46 @@ static const char* DASHBOARD_STYLE = R"(
     QHeaderView::section:hover {
         background-color: #334155;
     }
+    QScrollBar:vertical {
+        background-color: #0f172a;
+        width: 12px;
+        border-radius: 6px;
+        margin: 0;
+    }
+    QScrollBar::handle:vertical {
+        background-color: #475569;
+        border-radius: 6px;
+        min-height: 30px;
+    }
+    QScrollBar::handle:vertical:hover {
+        background-color: #64748b;
+    }
+    QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+        height: 0;
+    }
+    QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+        background: none;
+    }
+    QScrollBar:horizontal {
+        background-color: #0f172a;
+        height: 12px;
+        border-radius: 6px;
+        margin: 0;
+    }
+    QScrollBar::handle:horizontal {
+        background-color: #475569;
+        border-radius: 6px;
+        min-width: 30px;
+    }
+    QScrollBar::handle:horizontal:hover {
+        background-color: #64748b;
+    }
+    QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+        width: 0;
+    }
+    QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+        background: none;
+    }
     QLabel {
         color: #cbd5e1;
         font-size: 13px;
