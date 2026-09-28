@@ -200,9 +200,10 @@ static const char* DASHBOARD_STYLE = R"(
         gridline-color: #1e293b;
         color: #e2e8f0;
         font-size: 13px;
+        alternate-background-color: #1e293b;
     }
     QTableWidget::item {
-        padding: 6px;
+        padding: 10px 8px;
         border-bottom: 1px solid #1e293b;
     }
     QTableWidget::item:selected {
@@ -525,6 +526,8 @@ QWidget* MainWindow::createCustomersPanel() {
     custTable->horizontalHeader()->setStretchLastSection(true);
     custTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     custTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    custTable->setMinimumHeight(200);
+    custTable->setAlternatingRowColors(true);
 
     custTableLayout->addLayout(searchLayout);
     custTableLayout->addWidget(custTable, 1);
@@ -543,6 +546,8 @@ QWidget* MainWindow::createCustomersPanel() {
     vehTable->horizontalHeader()->setStretchLastSection(true);
     vehTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     vehTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    vehTable->setMinimumHeight(200);
+    vehTable->setAlternatingRowColors(true);
 
     vehTableLayout->addWidget(vehRefreshBtn);
     vehTableLayout->addWidget(vehTable, 1);
