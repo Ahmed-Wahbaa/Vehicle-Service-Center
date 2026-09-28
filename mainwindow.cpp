@@ -130,8 +130,8 @@ static const char* DASHBOARD_STYLE = R"(
         color: #3b82f6;
     }
     QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox, QTextEdit, QDateTimeEdit {
-        background-color: #0f172a;
-        border: 2px solid #334155;
+        background-color: #1e293b;
+        border: 1px solid #475569;
         border-radius: 6px;
         padding: 8px 12px;
         color: #f1f5f9;
@@ -139,10 +139,10 @@ static const char* DASHBOARD_STYLE = R"(
         selection-background-color: #3b82f6;
     }
     QLineEdit:focus, QComboBox:focus, QSpinBox:focus, QDoubleSpinBox:focus, QTextEdit:focus, QDateTimeEdit:focus {
-        border: 2px solid #3b82f6;
+        border: 1px solid #3b82f6;
     }
     QLineEdit:hover, QComboBox:hover, QSpinBox:hover, QDoubleSpinBox:hover, QTextEdit:hover, QDateTimeEdit:hover {
-        border: 2px solid #475569;
+        border: 1px solid #64748b;
     }
     QComboBox::drop-down {
         border: none;
@@ -567,7 +567,9 @@ QWidget* MainWindow::createCustomersPanel() {
     custTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     custTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     custTable->setMinimumHeight(200);
+    custTable->setMaximumHeight(250);
     custTable->setAlternatingRowColors(true);
+    custTable->verticalScrollBar()->setStyleSheet("QScrollBar:vertical { background: #0f172a; width: 12px; } QScrollBar::handle:vertical { background: #475569; border-radius: 6px; min-height: 30px; } QScrollBar::handle:vertical:hover { background: #64748b; }");
 
     custTableLayout->addLayout(searchLayout);
     custTableLayout->addWidget(custTable, 1);
@@ -587,7 +589,9 @@ QWidget* MainWindow::createCustomersPanel() {
     vehTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     vehTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     vehTable->setMinimumHeight(200);
+    vehTable->setMaximumHeight(250);
     vehTable->setAlternatingRowColors(true);
+    vehTable->verticalScrollBar()->setStyleSheet("QScrollBar:vertical { background: #0f172a; width: 12px; } QScrollBar::handle:vertical { background: #475569; border-radius: 6px; min-height: 30px; } QScrollBar::handle:vertical:hover { background: #64748b; }");
 
     vehTableLayout->addWidget(vehRefreshBtn);
     vehTableLayout->addWidget(vehTable, 1);
