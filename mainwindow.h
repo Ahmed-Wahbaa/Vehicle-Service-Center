@@ -20,6 +20,7 @@
 #include <QTextEdit>
 #include <QDateTimeEdit>
 #include <QFrame>
+#include <QScrollBar>
 #include "vehicle_service_center.hpp"
 
 class MainWindow : public QMainWindow {
