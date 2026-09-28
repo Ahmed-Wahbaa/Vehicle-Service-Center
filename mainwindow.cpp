@@ -130,19 +130,22 @@ static const char* DASHBOARD_STYLE = R"(
         color: #3b82f6;
     }
     QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox, QTextEdit, QDateTimeEdit {
-        background-color: #1e293b;
-        border: 1px solid #475569;
+        background-color: #334155;
+        border: 1px solid #64748b;
         border-radius: 6px;
         padding: 8px 12px;
-        color: #f1f5f9;
+        color: #ffffff;
         font-size: 13px;
         selection-background-color: #3b82f6;
     }
     QLineEdit:focus, QComboBox:focus, QSpinBox:focus, QDoubleSpinBox:focus, QTextEdit:focus, QDateTimeEdit:focus {
-        border: 1px solid #3b82f6;
+        border: 2px solid #3b82f6;
     }
     QLineEdit:hover, QComboBox:hover, QSpinBox:hover, QDoubleSpinBox:hover, QTextEdit:hover, QDateTimeEdit:hover {
-        border: 1px solid #64748b;
+        border: 1px solid #94a3b8;
+    }
+    QLineEdit::placeholder, QTextEdit::placeholder {
+        color: #94a3b8;
     }
     QComboBox::drop-down {
         border: none;
@@ -566,13 +569,16 @@ QWidget* MainWindow::createCustomersPanel() {
     custTable->horizontalHeader()->setStretchLastSection(true);
     custTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     custTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    custTable->setMinimumHeight(200);
-    custTable->setMaximumHeight(250);
     custTable->setAlternatingRowColors(true);
-    custTable->verticalScrollBar()->setStyleSheet("QScrollBar:vertical { background: #0f172a; width: 12px; } QScrollBar::handle:vertical { background: #475569; border-radius: 6px; min-height: 30px; } QScrollBar::handle:vertical:hover { background: #64748b; }");
+
+    QFrame* custTableContainer = new QFrame();
+    custTableContainer->setFixedHeight(220);
+    QVBoxLayout* custTableContainerLayout = new QVBoxLayout(custTableContainer);
+    custTableContainerLayout->setContentsMargins(0, 0, 0, 0);
+    custTableContainerLayout->addWidget(custTable);
 
     custTableLayout->addLayout(searchLayout);
-    custTableLayout->addWidget(custTable, 1);
+    custTableLayout->addWidget(custTableContainer, 1);
 
     // --- Vehicles Table ---
     QGroupBox* vehTableGroup = new QGroupBox("Registered Vehicles");
@@ -588,13 +594,16 @@ QWidget* MainWindow::createCustomersPanel() {
     vehTable->horizontalHeader()->setStretchLastSection(true);
     vehTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     vehTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    vehTable->setMinimumHeight(200);
-    vehTable->setMaximumHeight(250);
     vehTable->setAlternatingRowColors(true);
-    vehTable->verticalScrollBar()->setStyleSheet("QScrollBar:vertical { background: #0f172a; width: 12px; } QScrollBar::handle:vertical { background: #475569; border-radius: 6px; min-height: 30px; } QScrollBar::handle:vertical:hover { background: #64748b; }");
+
+    QFrame* vehTableContainer = new QFrame();
+    vehTableContainer->setFixedHeight(220);
+    QVBoxLayout* vehTableContainerLayout = new QVBoxLayout(vehTableContainer);
+    vehTableContainerLayout->setContentsMargins(0, 0, 0, 0);
+    vehTableContainerLayout->addWidget(vehTable);
 
     vehTableLayout->addWidget(vehRefreshBtn);
-    vehTableLayout->addWidget(vehTable, 1);
+    vehTableLayout->addWidget(vehTableContainer, 1);
 
     // --- Layout ---
     QHBoxLayout* topLayout = new QHBoxLayout();
