@@ -1,0 +1,19 @@
+# CMake and Qt Build Directories
+build/
+build-*/
+CMakeCache.txt
+CMakeFiles/
+*.cmake
+Makefile
+
+# Qt Creator user settings
+*.user
+*.user.*
+.qtc_clangd/
+.qt/
+
+# Executables and Libraries
+*.exe
+*.dll
+*.o
+*.a
