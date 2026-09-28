@@ -130,22 +130,23 @@ static const char* DASHBOARD_STYLE = R"(
         color: #3b82f6;
     }
     QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox, QTextEdit, QDateTimeEdit {
-        background-color: #334155;
-        border: 1px solid #64748b;
+        background-color: #475569;
+        border: 1px solid #94a3b8;
         border-radius: 6px;
         padding: 8px 12px;
         color: #ffffff;
-        font-size: 13px;
+        font-size: 14px;
+        font-weight: 500;
         selection-background-color: #3b82f6;
     }
     QLineEdit:focus, QComboBox:focus, QSpinBox:focus, QDoubleSpinBox:focus, QTextEdit:focus, QDateTimeEdit:focus {
         border: 2px solid #3b82f6;
     }
     QLineEdit:hover, QComboBox:hover, QSpinBox:hover, QDoubleSpinBox:hover, QTextEdit:hover, QDateTimeEdit:hover {
-        border: 1px solid #94a3b8;
+        border: 1px solid #cbd5e1;
     }
     QLineEdit::placeholder, QTextEdit::placeholder {
-        color: #94a3b8;
+        color: #e2e8f0;
     }
     QComboBox::drop-down {
         border: none;
@@ -570,15 +571,11 @@ QWidget* MainWindow::createCustomersPanel() {
     custTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     custTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     custTable->setAlternatingRowColors(true);
-
-    QFrame* custTableContainer = new QFrame();
-    custTableContainer->setFixedHeight(220);
-    QVBoxLayout* custTableContainerLayout = new QVBoxLayout(custTableContainer);
-    custTableContainerLayout->setContentsMargins(0, 0, 0, 0);
-    custTableContainerLayout->addWidget(custTable);
+    custTable->setMaximumHeight(220);
+    custTable->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     custTableLayout->addLayout(searchLayout);
-    custTableLayout->addWidget(custTableContainer, 1);
+    custTableLayout->addWidget(custTable, 1);
 
     // --- Vehicles Table ---
     QGroupBox* vehTableGroup = new QGroupBox("Registered Vehicles");
@@ -595,15 +592,11 @@ QWidget* MainWindow::createCustomersPanel() {
     vehTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     vehTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     vehTable->setAlternatingRowColors(true);
-
-    QFrame* vehTableContainer = new QFrame();
-    vehTableContainer->setFixedHeight(220);
-    QVBoxLayout* vehTableContainerLayout = new QVBoxLayout(vehTableContainer);
-    vehTableContainerLayout->setContentsMargins(0, 0, 0, 0);
-    vehTableContainerLayout->addWidget(vehTable);
+    vehTable->setMaximumHeight(220);
+    vehTable->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     vehTableLayout->addWidget(vehRefreshBtn);
-    vehTableLayout->addWidget(vehTableContainer, 1);
+    vehTableLayout->addWidget(vehTable, 1);
 
     // --- Layout ---
     QHBoxLayout* topLayout = new QHBoxLayout();
