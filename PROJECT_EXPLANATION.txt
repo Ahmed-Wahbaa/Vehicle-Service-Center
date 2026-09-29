@@ -12,17 +12,27 @@ inventory/spare parts, billing/payments, and user administration.
 
 ARCHITECTURE:
 -------------
-- Presentation Layer: Qt6 Widgets (mainwindow.cpp)
+- Presentation Layer: Qt6 Widgets (mainwindow.cpp) — Professional dark theme
 - Business Logic Layer: vehicle_service_center.hpp (header-only library)
 - Data Access Layer: PostgreSQL via libpq
 - Design Patterns: Singleton, Factory, Observer, Strategy
+
+FILES:
+------
+- main.cpp — Application entry point, database connection
+- mainwindow.h — MainWindow class declaration
+- mainwindow.cpp — Complete GUI implementation with dark theme
+- vehicle_service_center.hpp — Complete business logic (all 7 members)
+- TEAM_TEMPLATE.hpp — Skeleton with TODOs for team members to implement
+- schema.sql — Database schema and test data
+- CMakeLists.txt — Build configuration
 
 ================================================================================
                               JIRA STORIES
 ================================================================================
 
 ================================================================================
-STORY 1: Database Connection Manager (Team Member 1 - Leader)
+STORY 1: Database Connection Manager (Team Member 1 - Leader) — COMPLETED
 ================================================================================
 EPIC: Infrastructure
 PRIORITY: Critical
@@ -42,7 +52,7 @@ ACCEPTANCE CRITERIA:
 - Proper resource cleanup in destructor (PQfinish)
 
 TECHNICAL DETAILS:
-- File: vehicle_service_center.hpp (lines 1-54)
+- File: vehicle_service_center.hpp
 - Class: DatabaseManager
 - Pattern: Singleton with lazy initialization
 - Thread safety: std::mutex with std::lock_guard
@@ -76,7 +86,7 @@ ACCEPTANCE CRITERIA:
 - Permission checking methods (canManageUsers, canManageCustomers, etc.)
 
 TECHNICAL DETAILS:
-- File: vehicle_service_center.hpp (lines 56-142)
+- File: vehicle_service_center.hpp
 - Classes: UserRole (abstract), Admin, Receptionist, Mechanic, UserFactory, UserRepository
 - Pattern: Factory Method + Inheritance
 - Database: users table with role column
@@ -108,7 +118,7 @@ ACCEPTANCE CRITERIA:
 - Prevent duplicate phone numbers and license plates
 
 TECHNICAL DETAILS:
-- File: vehicle_service_center.hpp (lines 144-230)
+- File: vehicle_service_center.hpp
 - Classes: CustomerRepository, VehicleRepository
 - Database: customers table, vehicles table
 - Constraints: UNIQUE on phone and license_plate
@@ -139,7 +149,7 @@ ACCEPTANCE CRITERIA:
 - Prevent scheduling conflicts
 
 TECHNICAL DETAILS:
-- File: vehicle_service_center.hpp (lines 232-310)
+- File: vehicle_service_center.hpp
 - Class: AppointmentRepository
 - Database: appointments table
 - Status workflow: Pending -> Confirmed -> Completed/Cancelled
@@ -170,7 +180,7 @@ ACCEPTANCE CRITERIA:
 - Filter orders by status or by assigned mechanic
 
 TECHNICAL DETAILS:
-- File: vehicle_service_center.hpp (lines 312-420)
+- File: vehicle_service_center.hpp
 - Classes: ServiceOrderObserver, AuditLogger, ServiceOrderManager
 - Pattern: Observer pattern for status change notifications
 - Database: service_orders table
@@ -203,7 +213,7 @@ ACCEPTANCE CRITERIA:
 - View parts used for specific repair order
 
 TECHNICAL DETAILS:
-- File: vehicle_service_center.hpp (lines 422-510)
+- File: vehicle_service_center.hpp
 - Class: InventoryRepository
 - Database: parts table, service_order_parts (link table)
 - Transaction: INSERT into link table + UPDATE stock
@@ -235,7 +245,7 @@ ACCEPTANCE CRITERIA:
 - Prevent payment on orders with no parts
 
 TECHNICAL DETAILS:
-- File: vehicle_service_center.hpp (lines 512-600)
+- File: vehicle_service_center.hpp
 - Classes: PaymentStrategy (abstract), CashPayment, CardPayment, BillingService
 - Pattern: Strategy pattern for payment methods
 - Database: payments table
@@ -250,7 +260,7 @@ KEY CODE:
     BillingService::getTotalRevenue();
 
 ================================================================================
-STORY 8: GUI Integration & Main Application (Team Member 1 - You)
+STORY 8: GUI Integration & Main Application (Team Member 1 - You) — COMPLETED
 ================================================================================
 EPIC: Presentation Layer
 PRIORITY: Critical
@@ -272,6 +282,8 @@ ACCEPTANCE CRITERIA:
 - Professional dark theme with color-coded buttons
 - Error handling with user-friendly messages
 - Real-time table refresh after database operations
+- Scrollable tables with fixed maximum height
+- Clear input fields with good contrast
 
 TECHNICAL DETAILS:
 - Files: main.cpp, mainwindow.cpp, mainwindow.h
@@ -283,22 +295,36 @@ TECHNICAL DETAILS:
 
 KEY CODE:
     MainWindow::setupLoginUI();
+    MainWindow::setupDashboardUI();
     MainWindow::configureRoleDashboard();
+    MainWindow::handleLogin();
+    MainWindow::handleLogout();
     MainWindow::createCustomersPanel();
     MainWindow::createAppointmentsPanel();
     MainWindow::createServiceOrdersPanel();
     MainWindow::createInventoryPanel();
     MainWindow::createBillingPanel();
     MainWindow::createAdminPanel();
+    MainWindow::refreshCustomersTable();
+    MainWindow::refreshVehiclesTable();
+    MainWindow::refreshAppointmentsTable();
+    MainWindow::refreshServiceOrdersTable();
+    MainWindow::refreshPartsTable();
+    MainWindow::refreshUsersTable();
+    MainWindow::populateCustomerCombo();
+    MainWindow::populateVehicleCombo();
+    MainWindow::populateMechanicCombo();
+    MainWindow::populatePartCombo();
+    MainWindow::populateOrderCombo();
 
 ================================================================================
                          TEAM MEMBER SUMMARY
 ================================================================================
 
 MEMBER 1 (YOU - LEADER):
-- DatabaseManager (Singleton connection)
-- Complete GUI (all panels, login, dashboard)
-- Project integration and architecture
+- DatabaseManager (Singleton connection) — COMPLETED
+- Complete GUI (all panels, login, dashboard) — COMPLETED
+- Project integration and architecture — COMPLETED
 
 MEMBER 2:
 - User hierarchy (Admin, Receptionist, Mechanic)
