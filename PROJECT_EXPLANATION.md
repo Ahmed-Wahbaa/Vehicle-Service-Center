@@ -1,23 +1,21 @@
-================================================================================
-                    VEHICLE SERVICE CENTER MANAGEMENT SYSTEM
-                    Complete Project Explanation & Jira Stories
-================================================================================
+# VEHICLE SERVICE CENTER MANAGEMENT SYSTEM
+    Complete Project Explanation & Jira Stories
 
-PROJECT OVERVIEW:
+#### PROJECT OVERVIEW:
 -----------------
 A full-stack desktop application for managing a vehicle service center.
 Built with C++17, Qt6 (GUI), and PostgreSQL (Database).
 The system handles customers, vehicles, appointments, service orders,
 inventory/spare parts, billing/payments, and user administration.
 
-ARCHITECTURE:
+#### ARCHITECTURE:
 -------------
 - Presentation Layer: Qt6 Widgets (mainwindow.cpp) — Professional dark theme
 - Business Logic Layer: vehicle_service_center.hpp (header-only library)
 - Data Access Layer: PostgreSQL via libpq
 - Design Patterns: Singleton, Factory, Observer, Strategy
 
-FILES:
+#### FILES:
 ------
 - main.cpp — Application entry point, database connection
 - mainwindow.h — MainWindow class declaration
@@ -27,13 +25,13 @@ FILES:
 - schema.sql — Database schema and test data
 - CMakeLists.txt — Build configuration
 
-================================================================================
-                              JIRA STORIES
-================================================================================
+---
 
-================================================================================
+## JIRA STORIES
+
+
 STORY 1: Database Connection Manager (Team Member 1 - Leader) — COMPLETED
-================================================================================
+
 EPIC: Infrastructure
 PRIORITY: Critical
 ASSIGNED TO: Member 1 (Team Leader)
@@ -64,9 +62,9 @@ KEY CODE:
         PGconn* getConnection();
     };
 
-================================================================================
+
 STORY 2: User Authentication & Role-Based Access Control (Team Member 2)
-================================================================================
+
 EPIC: Security
 PRIORITY: Critical
 ASSIGNED TO: Member 2
@@ -98,9 +96,9 @@ KEY CODE:
     class Mechanic : public UserRole { /* mechanic permissions */ };
     UserFactory::createUser(id, uname, name, role);
 
-================================================================================
+
 STORY 3: Customer & Vehicle Registry (Team Member 3)
-================================================================================
+
 EPIC: Customer Management
 PRIORITY: High
 ASSIGNED TO: Member 3
@@ -130,9 +128,9 @@ KEY CODE:
     VehicleRepository::addVehicle(customerId, plate, make, model, year);
     VehicleRepository::getAllVehicles(); // JOIN with customers
 
-================================================================================
+
 STORY 4: Appointment Scheduling System (Team Member 4)
-================================================================================
+
 EPIC: Scheduling
 PRIORITY: High
 ASSIGNED TO: Member 4
@@ -160,9 +158,9 @@ KEY CODE:
     AppointmentRepository::updateAppointmentStatus(apptId, status);
     AppointmentRepository::getAppointmentsByStatus(status);
 
-================================================================================
+
 STORY 5: Service Order Management with Observer Pattern (Team Member 5)
-================================================================================
+
 EPIC: Work Orders
 PRIORITY: High
 ASSIGNED TO: Member 5
@@ -193,9 +191,9 @@ KEY CODE:
     ServiceOrderManager::updateOrderStatus(orderId, status);
     ServiceOrderManager::getServiceOrdersByMechanic(mechanicId);
 
-================================================================================
+
 STORY 6: Inventory & Spare Parts Management (Team Member 6)
-================================================================================
+
 EPIC: Inventory
 PRIORITY: Medium
 ASSIGNED TO: Member 6
@@ -225,9 +223,9 @@ KEY CODE:
     InventoryRepository::updatePartStock(partId, newQty);
     InventoryRepository::getPartsForOrder(orderId);
 
-================================================================================
+
 STORY 7: Billing & Payment Processing (Team Member 7)
-================================================================================
+
 EPIC: Billing
 PRIORITY: High
 ASSIGNED TO: Member 7
@@ -259,9 +257,9 @@ KEY CODE:
     BillingService::processPayment(orderId, amount, method);
     BillingService::getTotalRevenue();
 
-================================================================================
+
 STORY 8: GUI Integration & Main Application (Team Member 1 - You) — COMPLETED
-================================================================================
+
 EPIC: Presentation Layer
 PRIORITY: Critical
 ASSIGNED TO: You (Team Leader / Integrator)
@@ -317,9 +315,9 @@ KEY CODE:
     MainWindow::populatePartCombo();
     MainWindow::populateOrderCombo();
 
-================================================================================
-                         TEAM MEMBER SUMMARY
-================================================================================
+
+## TEAM MEMBER SUMMARY
+
 
 MEMBER 1 (YOU - LEADER):
 - DatabaseManager (Singleton connection) — COMPLETED
@@ -357,9 +355,9 @@ MEMBER 7:
 - PaymentStrategy pattern (Cash, Card)
 - Revenue reporting
 
-================================================================================
-                         DESIGN PATTERNS USED
-================================================================================
+
+## DESIGN PATTERNS USED
+
 
 1. SINGLETON PATTERN
    - DatabaseManager: ensures single DB connection instance
@@ -379,9 +377,9 @@ MEMBER 7:
    - CustomerRepository, VehicleRepository, etc.
    - Encapsulates data access logic
 
-================================================================================
-                         DATABASE SCHEMA
-================================================================================
+
+## DATABASE SCHEMA
+
 
 TABLES:
 - users (id, username, password_hash, full_name, role)
@@ -401,9 +399,9 @@ RELATIONSHIPS:
 - service_orders N:M parts (via service_order_parts)
 - service_orders 1:N payments
 
-================================================================================
-                         HOW TO PRESENT (VIDEO GUIDE)
-================================================================================
+
+## HOW TO PRESENT (VIDEO GUIDE)
+
 
 EACH TEAM MEMBER SHOULD:
 
@@ -421,6 +419,6 @@ SUGGESTED VIDEO STRUCTURE (2-3 minutes per member):
 - Database: Show the table structure and sample data
 - Conclusion: How this integrates with the rest of the system
 
-================================================================================
+
                          END OF DOCUMENT
-================================================================================
+
