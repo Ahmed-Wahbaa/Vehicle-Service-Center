@@ -1,0 +1,6 @@
+# CODEOWNERS file
+# This file defines who owns specific files in the repository.
+# Owners must review and approve changes to their files.
+
+# Team Leader owns the project explanation file
+/PROJECT_EXPLANATION.txt @Ahmed-Wahbaa
