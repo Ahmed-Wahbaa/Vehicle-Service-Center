@@ -370,6 +370,68 @@ TESTING:
 10. Logout — should return to login page
 
 ================================================================================
+STORY 9: Full Project Testing & Quality Assurance (Team Member 8 - NEW)
+================================================================================
+EPIC: Quality Assurance
+PRIORITY: Critical
+ASSIGNED TO: Member 8 (New Team Member / QA Tester)
+
+DESCRIPTION:
+As a new team member, I need to test the entire project and all functions
+again to make sure everything works correctly. If I find any issues, I need
+to contact the responsible team member and ask them to correct it.
+
+ACCEPTANCE CRITERIA:
+- Test all features from all 7 stories
+- Verify all database operations work correctly
+- Check all error handling and edge cases
+- Test all user roles and permissions
+- Verify GUI is responsive and user-friendly
+- Document any bugs or issues found
+- Contact the responsible member for each issue
+- Verify fixes are applied correctly
+
+TESTING CHECKLIST:
+1. Login with all 3 roles (admin, receptionist, mechanic)
+2. Add customer — verify it appears in table
+3. Add vehicle — verify it appears in table
+4. Search customer — verify results are correct
+5. Schedule appointment — verify it appears in table
+6. Update appointment status — verify it changes
+7. Create service order — verify it appears in table
+8. Update order status — verify audit log prints
+9. Add part to inventory — verify it appears in table
+10. Log part usage — verify stock decreases
+11. Calculate bill — verify total is correct
+12. Process payment — verify success message
+13. Create new user — verify it appears in admin table
+14. View reports — verify revenue is correct
+15. Test error cases (empty fields, wrong data, duplicates)
+16. Test logout and login again
+17. Test all tabs for each role
+18. Verify tables refresh after each operation
+19. Check scrollbars work in tables
+20. Verify input fields are clear and readable
+
+IF YOU FIND A BUG:
+1. Note the exact steps to reproduce it
+2. Identify which story/member is responsible
+3. Contact that team member and describe the issue
+4. Ask them to fix it
+5. Test again after they fix it
+6. Update this file with the result
+
+RESPONSIBILITY MAP:
+- Database connection issues → Member 1
+- Login/role issues → Member 2
+- Customer/vehicle issues → Member 3
+- Appointment issues → Member 4
+- Service order issues → Member 5
+- Inventory issues → Member 6
+- Billing/payment issues → Member 7
+- GUI/display issues → Member 1
+
+================================================================================
                          TEAM MEMBER SUMMARY
 ================================================================================
 
