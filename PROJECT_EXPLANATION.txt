@@ -508,35 +508,35 @@ MEMBER 1 (YOU - LEADER):
 - Project integration and architecture — COMPLETED
 
 MEMBER 2:
-- User hierarchy (Admin, Receptionist, Mechanic)
-- UserFactory pattern
-- Authentication system
-- Role-based permissions
+- (Testing and editing if needed) User hierarchy (Admin, Receptionist, Mechanic)
+- (Testing and editing if needed) UserFactory pattern
+- (Testing and editing if needed) Authentication system
+- (Testing and editing if needed) Role-based permissions
 
 MEMBER 3:
-- CustomerRepository (add, search, list)
-- VehicleRepository (add, list with JOIN)
-- Customer-Vehicle relationship
+- (Testing and editing if needed) CustomerRepository (add, search, list)
+- (Testing and editing if needed) VehicleRepository (add, list with JOIN)
+- (Testing and editing if needed) Customer-Vehicle relationship
 
 MEMBER 4:
-- AppointmentRepository (create, update status)
-- Status filtering
-- Date/time scheduling
+- (Testing and editing if needed) AppointmentRepository (create, update status)
+- (Testing and editing if needed) Status filtering
+- (Testing and editing if needed) Date/time scheduling
 
 MEMBER 5:
-- ServiceOrderManager (create, update status)
-- Observer pattern (AuditLogger)
-- Mechanic assignment
+- (Testing and editing if needed) ServiceOrderManager (create, update status)
+- (Testing and editing if needed) Observer pattern (AuditLogger)
+- (Testing and editing if needed) Mechanic assignment
 
 MEMBER 6:
-- InventoryRepository (add parts, stock management)
-- Part usage logging
-- Stock deduction on repair
+- (Testing and editing if needed) InventoryRepository (add parts, stock management)
+- (Testing and editing if needed) Part usage logging
+- (Testing and editing if needed) Stock deduction on repair
 
 MEMBER 7:
-- BillingService (calculate bill)
-- PaymentStrategy pattern (Cash, Card)
-- Revenue reporting
+- (Testing and editing if needed) BillingService (calculate bill)
+- (Testing and editing if needed) PaymentStrategy pattern (Cash, Card)
+- (Testing and editing if needed) Revenue reporting
 
 ================================================================================
                          DESIGN PATTERNS USED
