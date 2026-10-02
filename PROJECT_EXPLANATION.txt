@@ -176,6 +176,40 @@ Method 2: Using Command Line
                               JIRA STORIES
 ================================================================================
 
+BELOW IS THE WORK SPLIT FOR EACH MEMBER. EACH MEMBER IS RESPONSIBLE FOR
+TESTING AND CORRECTING THEIR OWN PART IF NEEDED:
+
+MEMBER 2:
+- User hierarchy (Admin, Receptionist, Mechanic)
+- UserFactory pattern
+- Authentication system
+- Role-based permissions
+
+MEMBER 3:
+- CustomerRepository (add, search, list)
+- VehicleRepository (add, list with JOIN)
+- Customer-Vehicle relationship
+
+MEMBER 4:
+- AppointmentRepository (create, update status)
+- Status filtering
+- Date/time scheduling
+
+MEMBER 5:
+- ServiceOrderManager (create, update status)
+- Observer pattern (AuditLogger)
+- Mechanic assignment
+
+MEMBER 6:
+- InventoryRepository (add parts, stock management)
+- Part usage logging
+- Stock deduction on repair
+
+MEMBER 7:
+- BillingService (calculate bill)
+- PaymentStrategy pattern (Cash, Card)
+- Revenue reporting
+
 ================================================================================
 STORY 1: Database Connection Manager (Team Member 1 - Leader) — COMPLETED
 ================================================================================
