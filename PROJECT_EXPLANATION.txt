@@ -15,6 +15,39 @@ Members 2-7: TESTING & CORRECTING THEIR PARTS
   - Making corrections and fixes as needed
   - Will update the file once their part is fully working
 
+Member 8 (New): FULL PROJECT TESTING & QA
+  - Testing all features from all stories
+  - Will contact responsible member if bugs found
+  - Will verify fixes are applied correctly
+
+================================================================================
+STORY 1: Database Connection Manager (Team Member 1 - Leader) — COMPLETED
+================================================================================
+EPIC: Infrastructure
+PRIORITY: Critical
+ASSIGNED TO: Member 1 (Team Leader)
+
+DESCRIPTION:
+As a system administrator, I need a reliable database connection manager
+so that the application can securely connect to PostgreSQL and execute
+queries.
+
+ACCEPTANCE CRITERIA:
+- Implement Singleton pattern for DatabaseManager class
+- Thread-safe connection using std::mutex
+- Connection string: host=localhost port=5432 dbname=vehicle_db
+- Automatic connection validation (PQstatus check)
+- Graceful error handling with descriptive messages
+- Proper resource cleanup in destructor (PQfinish)
+
+TESTING:
+1. Run the application — it should connect without errors
+2. If connection fails, check:
+   - PostgreSQL is running
+   - Database "vehicle_db" exists
+   - Password in main.cpp is correct
+3. Try connecting with wrong password — should show error message
+
 PROJECT OVERVIEW:
 -----------------
 A full-stack desktop application for managing a vehicle service center.
