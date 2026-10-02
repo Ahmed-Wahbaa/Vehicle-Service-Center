@@ -3,6 +3,18 @@
                     Complete Project Explanation & Jira Stories
 ================================================================================
 
+CURRENT STATUS:
+---------------
+Member 1 (Team Leader): ALL COMPLETED
+  - DatabaseManager (Singleton) — DONE
+  - Complete GUI (all panels, login, dashboard) — DONE
+  - Project integration and architecture — DONE
+
+Members 2-7: TESTING & CORRECTING THEIR PARTS
+  - Each member is testing their own section in vehicle_service_center.hpp
+  - Making corrections and fixes as needed
+  - Will update the file once their part is fully working
+
 PROJECT OVERVIEW:
 -----------------
 A full-stack desktop application for managing a vehicle service center.
