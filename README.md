@@ -1,0 +1,502 @@
+## VEHICLE SERVICE CENTER MANAGEMENT SYSTEM
+    Complete Project Explanation & Jira Stories
+
+### CURRENT STATUS:
+---------------
+Member 1 (Team Leader): ALL COMPLETED
+  - DatabaseManager (Singleton) — DONE
+  - Complete GUI (all panels, login, dashboard) — DONE
+  - Project integration and architecture — DONE
+
+Members 2-7: TESTING & CORRECTING THEIR PARTS
+  - Each member is testing their own section in vehicle_service_center.hpp
+  - Making corrections and fixes as needed
+  - Will update the file once their part is fully working
+
+STORY 1: Database Connection Manager (Team Member 1 - Leader) — COMPLETED
+EPIC: Infrastructure
+PRIORITY: Critical
+ASSIGNED TO: Member 1 (Team Leader)
+
+DESCRIPTION:
+As a system administrator, I need a reliable database connection manager
+so that the application can securely connect to PostgreSQL and execute
+queries.
+
+ACCEPTANCE CRITERIA:
+- Implement Singleton pattern for DatabaseManager class
+- Thread-safe connection using std::mutex
+- Connection string: host=localhost port=5432 dbname=vehicle_db
+- Automatic connection validation (PQstatus check)
+- Graceful error handling with descriptive messages
+- Proper resource cleanup in destructor (PQfinish)
+
+TESTING:
+1. Run the application — it should connect without errors
+2. If connection fails, check:
+   - PostgreSQL is running
+   - Database "vehicle_db" exists
+   - Password in main.cpp is correct
+3. Try connecting with wrong password — should show error message
+
+PROJECT OVERVIEW:
+-----------------
+A full-stack desktop application for managing a vehicle service center.
+Built with C++17, Qt6 (GUI), and PostgreSQL (Database).
+The system handles customers, vehicles, appointments, service orders,
+inventory/spare parts, billing/payments, and user administration.
+
+ARCHITECTURE:
+-------------
+- Presentation Layer: Qt6 Widgets (mainwindow.cpp) — Professional dark theme
+- Business Logic Layer: vehicle_service_center.hpp (header-only library)
+- Data Access Layer: PostgreSQL via libpq
+- Design Patterns: Singleton, Factory, Observer, Strategy
+
+FILES:
+------
+- main.cpp — Application entry point, database connection
+- mainwindow.h — MainWindow class declaration
+- mainwindow.cpp — Complete GUI implementation with dark theme
+- vehicle_service_center.hpp — Complete business logic (all 7 members)
+- schema.sql — Database schema and test data
+- CMakeLists.txt — Build configuration
+
+                         WHAT TO INSTALL (SETUP GUIDE)
+
+To run this project on your laptop, install these apps:
+
+1. Qt6 (with MinGW 64-bit)
+   - Download from: https://www.qt.io/download
+   - Install Qt 6.x with MinGW 64-bit compiler
+   - Add Qt bin folder to PATH (e.g., C:\Qt\6.x.x\mingw_64\bin)
+
+2. PostgreSQL
+   - Download from: https://www.postgresql.org/download/
+   - Install PostgreSQL 15 or 16
+   - Remember your password (default user: postgres)
+   - Add PostgreSQL bin folder to PATH (e.g., C:\Program Files\PostgreSQL\16\bin)
+
+3. CMake
+   - Download from: https://cmake.org/download/
+   - Install CMake 3.16 or higher
+
+4. Git
+   - Download from: https://git-scm.com/download/win
+   - Install Git for Windows
+
+5. Qt Creator (optional but recommended)
+   - Comes with Qt installer
+   - Or download from: https://www.qt.io/product/development-tools
+
+6. pgAdmin 4 (optional, for database management)
+   - Comes with PostgreSQL installer
+   - Or download from: https://www.pgadmin.org/download/
+
+                         HOW TO ORGANIZE YOUR FILES
+
+1. Clone the repository:
+   git clone https://github.com/Ahmed-Wahbaa/Vehicle-Service-Center.git
+
+2. Project structure:
+```
+   VehicleServiceCenterGUI/
+   ├── main.cpp                    (Entry point)
+   ├── mainwindow.h                (GUI header)
+   ├── mainwindow.cpp              (GUI implementation)
+   ├── vehicle_service_center.hpp  (Business logic - YOUR WORK HERE)
+   ├── schema.sql                  (Database setup)
+   ├── CMakeLists.txt              (Build config)
+   └── PROJECT_EXPLANATION.txt     (This file)
+```
+4. Each team member works on their section in vehicle_service_center.hpp:
+   - Member 1: DatabaseManager (lines ~1-54)
+   - Member 2: UserRole, Admin, Receptionist, Mechanic, UserFactory, UserRepository
+   - Member 3: Customer, Vehicle structs, CustomerRepository, VehicleRepository
+   - Member 4: Appointment struct, AppointmentRepository
+   - Member 5: ServiceOrder struct, ServiceOrderObserver, AuditLogger, ServiceOrderManager
+   - Member 6: Part struct, InventoryRepository
+   - Member 7: Payment struct, PaymentStrategy, CashPayment, CardPayment, BillingService
+
+                         HOW TO SET UP THE DATABASE
+
+1. Open pgAdmin 4 or psql command line
+
+2. Create the database:
+   CREATE DATABASE vehicle_db;
+
+3. Run the schema file:
+   - In pgAdmin: Right-click vehicle_db → Query Tool → Open schema.sql → Execute
+   - Or in command line:
+     psql -U postgres -d vehicle_db -f "path\to\schema.sql"
+
+4. Verify tables exist:
+   \dt
+   You should see: users, customers, vehicles, appointments, service_orders,
+                   parts, service_order_parts, payments
+
+5. Update the connection string in main.cpp if your password is different:
+   DatabaseManager::getInstance("host=localhost port=5432 dbname=vehicle_db user=postgres password=YOUR_PASSWORD");
+
+                         HOW TO BUILD AND RUN
+
+Method 1: Using Qt Creator
+1. Open Qt Creator
+2. File → Open File or Project → Select CMakeLists.txt
+3. Configure the project (select MinGW 64-bit kit)
+4. Click Build (Ctrl+B)
+5. Click Run (Ctrl+R)
+
+Method 2: Using Command Line
+1. Open terminal in project folder
+2. Run:
+   mkdir build && cd build
+   cmake ..
+   cmake --build .
+3. Run the executable:
+   .\VehicleServiceCenterGUI.exe
+
+                              JIRA STORIES
+
+BELOW IS THE WORK SPLIT FOR EACH MEMBER. EACH MEMBER IS RESPONSIBLE FOR
+TESTING AND CORRECTING THEIR OWN PART IF NEEDED:
+
+MEMBER 2:
+- User hierarchy (Admin, Receptionist, Mechanic)
+- UserFactory pattern
+- Authentication system
+- Role-based permissions
+
+MEMBER 3:
+- CustomerRepository (add, search, list)
+- VehicleRepository (add, list with JOIN)
+- Customer-Vehicle relationship
+
+MEMBER 4:
+- AppointmentRepository (create, update status)
+- Status filtering
+- Date/time scheduling
+
+MEMBER 5:
+- ServiceOrderManager (create, update status)
+- Observer pattern (AuditLogger)
+- Mechanic assignment
+
+MEMBER 6:
+- InventoryRepository (add parts, stock management)
+- Part usage logging
+- Stock deduction on repair
+
+MEMBER 7:
+- BillingService (calculate bill)
+- PaymentStrategy pattern (Cash, Card)
+- Revenue reporting
+
+STORY 1: Database Connection Manager (Team Member 1 - Leader) — COMPLETED
+EPIC: Infrastructure
+PRIORITY: Critical
+ASSIGNED TO: Member 1 (Team Leader)
+
+DESCRIPTION:
+As a system administrator, I need a reliable database connection manager
+so that the application can securely connect to PostgreSQL and execute
+queries.
+
+ACCEPTANCE CRITERIA:
+- Implement Singleton pattern for DatabaseManager class
+- Thread-safe connection using std::mutex
+- Connection string: host=localhost port=5432 dbname=vehicle_db
+- Automatic connection validation (PQstatus check)
+- Graceful error handling with descriptive messages
+- Proper resource cleanup in destructor (PQfinish)
+
+TESTING:
+1. Run the application — it should connect without errors
+2. If connection fails, check:
+   - PostgreSQL is running
+   - Database "vehicle_db" exists
+   - Password in main.cpp is correct
+3. Try connecting with wrong password — should show error message
+
+STORY 2: User Authentication & Role-Based Access Control (Team Member 2)
+EPIC: Security
+PRIORITY: Critical
+ASSIGNED TO: Member 2
+
+DESCRIPTION:
+As a system, I need role-based authentication so that different staff
+members (Admin, Receptionist, Mechanic) can access only their permitted
+features.
+
+ACCEPTANCE CRITERIA:
+- Implement User hierarchy with virtual methods
+- Admin: full access to all features
+- Receptionist: customers, appointments, billing
+- Mechanic: service orders, inventory
+- Factory pattern for creating appropriate user type
+- Secure password verification against database
+- Permission checking methods (canManageUsers, canManageCustomers, etc.)
+
+TESTING:
+1. Login as admin_user / password123 — should see ALL tabs
+2. Login as reception_user / password123 — should see Customers, Appointments, Billing only
+3. Login as mechanic_john / password123 — should see Work Orders, Inventory only
+4. Login with wrong password — should show "Invalid username or password!"
+5. Login with empty fields — should show "Please enter both username and password"
+
+STORY 3: Customer & Vehicle Registry (Team Member 3)
+EPIC: Customer Management
+PRIORITY: High
+ASSIGNED TO: Member 3
+
+DESCRIPTION:
+As a receptionist, I need to register customers and their vehicles
+so that the service center can track ownership and service history.
+
+ACCEPTANCE CRITERIA:
+- Add new customer (name, phone, email)
+- Add new vehicle (customer, plate, make, model, year)
+- View all customers in a searchable table
+- View all vehicles with customer names (JOIN query)
+- Search customers by name, phone, or email
+- Prevent duplicate phone numbers and license plates
+
+TESTING:
+1. Add a new customer — should appear in table immediately
+2. Add customer with duplicate phone — should show error
+3. Add a vehicle for existing customer — should appear in vehicle table
+4. Search for customer by name — should filter results
+5. Search for customer by phone — should filter results
+6. Leave name empty and click Add — should show validation error
+
+STORY 4: Appointment Scheduling System (Team Member 4)
+EPIC: Scheduling
+PRIORITY: High
+ASSIGNED TO: Member 4
+
+DESCRIPTION:
+As a receptionist, I need to schedule service appointments so that
+customers can book their vehicle service in advance.
+
+ACCEPTANCE CRITERIA:
+- Create appointment (vehicle, customer, date/time)
+- Update appointment status (Pending, Confirmed, Cancelled, Completed)
+- View all appointments with vehicle and customer details
+- Filter appointments by status
+- Prevent scheduling conflicts
+
+TESTING:
+1. Schedule a new appointment — should appear in table with status "Pending"
+2. Select an appointment and change status to "Confirmed" — should update
+3. Filter by status "Pending" — should show only pending appointments
+4. Filter by status "Confirmed" — should show only confirmed appointments
+5. Try scheduling without selecting vehicle — should show error
+
+STORY 5: Service Order Management with Observer Pattern (Team Member 5)
+EPIC: Work Orders
+PRIORITY: High
+ASSIGNED TO: Member 5
+
+DESCRIPTION:
+As a mechanic, I need to manage repair service orders so that
+I can track the status of each vehicle repair from start to finish.
+
+ACCEPTANCE CRITERIA:
+- Create service order from confirmed appointment
+- Assign mechanic to service order
+- Update order status (Pending, In Progress, Completed)
+- Observer pattern: notify on status change (audit logging)
+- View all service orders with mechanic and vehicle details
+- Filter orders by status or by assigned mechanic
+
+TESTING:
+1. Create a service order from a confirmed appointment — should appear in table
+2. Assign a mechanic — should show mechanic name in table
+3. Update status to "In Progress" — should update and print audit log to console
+4. Update status to "Completed" — should update and print audit log
+5. Filter by status — should show only matching orders
+6. Check console output — should see "[AUDIT LOG]" messages
+
+STORY 6: Inventory & Spare Parts Management (Team Member 6)
+EPIC: Inventory
+PRIORITY: Medium
+ASSIGNED TO: Member 6
+
+DESCRIPTION:
+As an inventory manager, I need to track spare parts stock so that
+mechanics can use parts during repairs and stock levels stay accurate.
+
+ACCEPTANCE CRITERIA:
+- Add new spare part (name, part number, price, stock quantity)
+- Update stock quantity manually
+- Log part usage on repair orders (auto-deduct from stock)
+- View all parts with current stock levels
+- Prevent negative stock (check before deducting)
+- View parts used for specific repair order
+
+TESTING:
+1. Add a new part — should appear in inventory table
+2. Log part usage on a repair order — stock should decrease
+3. Update stock quantity manually — should update in table
+4. Add part with duplicate part number — should show error
+5. Check stock after logging usage — should be reduced by correct amount
+
+STORY 7: Billing & Payment Processing (Team Member 7)
+EPIC: Billing
+PRIORITY: High
+ASSIGNED TO: Member 7
+
+DESCRIPTION:
+As a receptionist, I need to calculate bills and process payments
+so that customers can pay for their vehicle service.
+
+ACCEPTANCE CRITERIA:
+- Calculate total bill from parts used in service order
+- Process payment (Cash or Card)
+- View payment history for each order
+- View total revenue across all payments
+- Strategy pattern for different payment methods
+- Prevent payment on orders with no parts
+
+TESTING:
+1. Calculate bill for order with parts — should show correct total
+2. Calculate bill for order with no parts — should show $0.00
+3. Process Cash payment — should show success message
+4. Process Card payment — should show success message
+5. Try payment on order with no parts — should show error
+6. Check Admin Panel → View Total Revenue — should include new payment
+
+STORY 8: GUI Integration & Main Application (Team Member 1 - You) — COMPLETED
+EPIC: Presentation Layer
+PRIORITY: Critical
+ASSIGNED TO: You (Team Leader / Integrator)
+
+DESCRIPTION:
+As a user, I need a professional graphical interface so that I can
+interact with all system features through an intuitive UI.
+
+ACCEPTANCE CRITERIA:
+- Login page with username/password authentication
+- Role-based dashboard (different tabs per role)
+- Customers & Vehicles panel: register, search, view tables
+- Appointments panel: schedule, update status, filter
+- Work Orders panel: create, assign mechanic, update status
+- Inventory panel: add parts, update stock, log usage
+- Billing panel: calculate bill, process payment
+- Admin panel: create users, view reports
+- Professional dark theme with color-coded buttons
+- Error handling with user-friendly messages
+- Real-time table refresh after database operations
+- Scrollable tables with fixed maximum height
+- Clear input fields with good contrast
+
+TESTING:
+1. Login with each role — should show correct tabs
+2. Add customer — should appear in table
+3. Add vehicle — should appear in table
+4. Schedule appointment — should appear in table
+5. Create service order — should appear in table
+6. Add part — should appear in table
+7. Calculate bill — should show total
+8. Process payment — should show success
+9. Create user — should appear in admin table
+10. Logout — should return to login page
+
+                         TEAM MEMBER SUMMARY
+
+MEMBER 1 (YOU - LEADER):
+- DatabaseManager (Singleton connection) — COMPLETED
+- Complete GUI (all panels, login, dashboard) — COMPLETED
+- Project integration and architecture — COMPLETED
+
+MEMBER 2:
+- (Testing and editing if needed) User hierarchy (Admin, Receptionist, Mechanic)
+- (Testing and editing if needed) UserFactory pattern
+- (Testing and editing if needed) Authentication system
+- (Testing and editing if needed) Role-based permissions
+
+MEMBER 3:
+- (Testing and editing if needed) CustomerRepository (add, search, list)
+- (Testing and editing if needed) VehicleRepository (add, list with JOIN)
+- (Testing and editing if needed) Customer-Vehicle relationship
+
+MEMBER 4:
+- (Testing and editing if needed) AppointmentRepository (create, update status)
+- (Testing and editing if needed) Status filtering
+- (Testing and editing if needed) Date/time scheduling
+
+MEMBER 5:
+- (Testing and editing if needed) ServiceOrderManager (create, update status)
+- (Testing and editing if needed) Observer pattern (AuditLogger)
+- (Testing and editing if needed) Mechanic assignment
+
+MEMBER 6:
+- (Testing and editing if needed) InventoryRepository (add parts, stock management)
+- (Testing and editing if needed) Part usage logging
+- (Testing and editing if needed) Stock deduction on repair
+
+MEMBER 7:
+- (Testing and editing if needed) BillingService (calculate bill)
+- (Testing and editing if needed) PaymentStrategy pattern (Cash, Card)
+- (Testing and editing if needed) Revenue reporting
+
+                         DESIGN PATTERNS USED
+
+1. SINGLETON PATTERN
+   - DatabaseManager: ensures single DB connection instance
+
+2. FACTORY PATTERN
+   - UserFactory: creates appropriate user type based on role
+
+3. OBSERVER PATTERN
+   - ServiceOrderObserver: notifies on status changes
+   - AuditLogger: concrete observer for logging
+
+4. STRATEGY PATTERN
+   - PaymentStrategy: interchangeable payment methods
+   - CashPayment, CardPayment: concrete strategies
+
+5. REPOSITORY PATTERN
+   - CustomerRepository, VehicleRepository, etc.
+   - Encapsulates data access logic
+
+                         DATABASE SCHEMA
+
+TABLES:
+- users (id, username, password_hash, full_name, role)
+- customers (id, name, phone, email)
+- vehicles (id, customer_id, license_plate, make, model, year)
+- appointments (id, vehicle_id, customer_id, scheduled_date, status)
+- service_orders (id, appointment_id, mechanic_id, status, notes)
+- parts (id, name, part_number, unit_price, stock_quantity)
+- service_order_parts (id, service_order_id, part_id, quantity)
+- payments (id, service_order_id, amount, payment_method, payment_date)
+
+RELATIONSHIPS:
+- customers 1:N vehicles
+- vehicles 1:N appointments
+- appointments 1:N service_orders
+- users 1:N service_orders (mechanic)
+- service_orders N:M parts (via service_order_parts)
+- service_orders 1:N payments
+
+                         HOW TO PRESENT (VIDEO GUIDE)
+
+EACH TEAM MEMBER SHOULD:
+
+1. Show their code section in vehicle_service_center.hpp
+2. Explain the design pattern they used
+3. Demonstrate the feature working in the GUI
+4. Show the database table their code interacts with
+5. Explain error handling and edge cases
+
+SUGGESTED VIDEO STRUCTURE (2-3 minutes per member):
+- Introduction: "I'm Member X, I worked on [feature]"
+- Code walkthrough: Show key classes and methods
+- Pattern explanation: Why this pattern was chosen
+- Live demo: Show the feature working in the application
+- Database: Show the table structure and sample data
+- Conclusion: How this integrates with the rest of the system
+
+                         END OF DOCUMENT
+================================================================================
