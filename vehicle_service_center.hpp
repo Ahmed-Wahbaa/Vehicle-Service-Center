@@ -184,13 +184,47 @@ public:
 
 class UserRepository {
 public:
-    std::unique_ptr<UserRole> authenticate(const std::string& username, const std::string& password) {
-        PGconn* conn = DatabaseManager::getInstance()->getConnection();
-        const char* query = "SELECT id, username, full_name, role FROM users WHERE username = $1 AND password_hash = $2;";
-        const char* paramValues[2] = { username.c_str(), password.c_str() };
 
-        PGresult* res = PQexecParams(conn, query, 2, NULL, paramValues, NULL, NULL, 0);
-        if (PQresultStatus(res) != PGRES_TUPLES_OK || PQntuples(res) == 0) {
+    std::unique_ptr<UserRole> authenticate(
+        const std::string& username,
+        const std::string& password
+    ) {
+        PGconn* conn = DatabaseManager::getInstance()->getConnection();
+
+        // Check whether the database connection is valid.
+        if (conn == nullptr || PQstatus(conn) != CONNECTION_OK) {
+            std::cerr << "Database connection is not available.\n";
+            return nullptr;
+        }
+
+        const char* query =
+            "SELECT id, username, full_name, role "
+            "FROM public.users "
+            "WHERE username = $1 AND password_hash = $2;";
+
+        const char* paramValues[2] = {
+            username.c_str(),
+            password.c_str()
+        };
+
+        PGresult* res = PQexecParams(
+            conn, query, 2, nullptr, paramValues, nullptr, nullptr, 0
+        );
+
+        // Check whether the query executed successfully.
+        if (res == nullptr || PQresultStatus(res) != PGRES_TUPLES_OK) {
+            std::cerr << "Login query failed.\n";
+
+            if (res != nullptr) {
+                std::cerr << PQresultErrorMessage(res);
+                PQclear(res);
+            }
+
+            return nullptr;
+        }
+
+        // No matching username and password.
+        if (PQntuples(res) == 0) {
             PQclear(res);
             return nullptr;
         }
@@ -201,9 +235,9 @@ public:
         std::string role = PQgetvalue(res, 0, 3);
 
         PQclear(res);
+
         return UserFactory::createUser(id, uname, fullName, role);
     }
-
     bool createUser(const std::string& username, const std::string& password, const std::string& fullName, const std::string& role) {
         PGconn* conn = DatabaseManager::getInstance()->getConnection();
         const char* query = "INSERT INTO users (username, password_hash, full_name, role) VALUES ($1, $2, $3, $4);";

@@ -433,7 +433,8 @@ void MainWindow::setupDashboardUI() {
 }
 
 void MainWindow::handleLogin() {
-    std::string username = userEdit->text().toStdString();
+
+    std::string username = userEdit->text().trimmed().toStdString();
     std::string password = passEdit->text().toStdString();
 
     if (username.empty() || password.empty()) {
