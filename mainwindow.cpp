@@ -931,142 +931,121 @@ QWidget* MainWindow::createInventoryPanel() {
     mainLayout->setContentsMargins(16, 16, 16, 16);
     mainLayout->setSpacing(12);
 
+    // --- Add New Part ---
     QGroupBox* addPartGroup = new QGroupBox("Add New Spare Part");
     addPartGroup->setStyleSheet(DASHBOARD_STYLE);
-    QFormLayout* addPartForm = new QFormLayout(addPartGroup);
-    addPartForm->setSpacing(8);
+    QFormLayout* addForm = new QFormLayout(addPartGroup);
 
     QLineEdit* partNameEdit = new QLineEdit();
     partNameEdit->setPlaceholderText("Part Name");
     QLineEdit* partNumberEdit = new QLineEdit();
     partNumberEdit->setPlaceholderText("Part Number");
     QDoubleSpinBox* partPriceSpin = new QDoubleSpinBox();
-    partPriceSpin->setRange(0, 10000);
-    partPriceSpin->setDecimals(2);
-    partPriceSpin->setPrefix("$ ");
+    partPriceSpin->setRange(0, 100000);
+    partPriceSpin->setPrefix("$");
     QSpinBox* partQtySpin = new QSpinBox();
     partQtySpin->setRange(0, 10000);
 
     QPushButton* addPartBtn = new QPushButton("Add Part");
     addPartBtn->setObjectName("successBtn");
-    addPartBtn->setMinimumHeight(36);
 
-    addPartForm->addRow("Name:", partNameEdit);
-    addPartForm->addRow("Part Number:", partNumberEdit);
-    addPartForm->addRow("Unit Price:", partPriceSpin);
-    addPartForm->addRow("Stock Quantity:", partQtySpin);
-    addPartForm->addRow("", addPartBtn);
+    addForm->addRow("Name:", partNameEdit);
+    addForm->addRow("Part Number:", partNumberEdit);
+    addForm->addRow("Price:", partPriceSpin);
+    addForm->addRow("Quantity:", partQtySpin);
+    addForm->addRow("", addPartBtn);
 
-    QGroupBox* stockGroup = new QGroupBox("Update Stock Quantity");
-    stockGroup->setStyleSheet(DASHBOARD_STYLE);
-    QFormLayout* stockForm = new QFormLayout(stockGroup);
-    stockForm->setSpacing(8);
-
-    QComboBox* stockPartCombo = new QComboBox();
-    populatePartCombo(stockPartCombo);
-    QSpinBox* newStockSpin = new QSpinBox();
-    newStockSpin->setRange(0, 10000);
-
-    QPushButton* updateStockBtn = new QPushButton("Update Stock");
-    updateStockBtn->setObjectName("warningBtn");
-    updateStockBtn->setMinimumHeight(36);
-
-    stockForm->addRow("Part:", stockPartCombo);
-    stockForm->addRow("New Quantity:", newStockSpin);
-    stockForm->addRow("", updateStockBtn);
-
-    QGroupBox* logPartGroup = new QGroupBox("Log Used Part on Repair Order");
-    logPartGroup->setStyleSheet(DASHBOARD_STYLE);
-    QFormLayout* logPartForm = new QFormLayout(logPartGroup);
-    logPartForm->setSpacing(8);
-
-    QComboBox* logOrderCombo = new QComboBox();
-    populateOrderCombo(logOrderCombo);
-    QComboBox* logPartCombo = new QComboBox();
-    populatePartCombo(logPartCombo);
-    QSpinBox* logQtySpin = new QSpinBox();
-    logQtySpin->setRange(1, 100);
-
-    QPushButton* logPartBtn = new QPushButton("Log Part Usage");
-    logPartBtn->setObjectName("purpleBtn");
-    logPartBtn->setMinimumHeight(36);
-
-    logPartForm->addRow("Repair Order:", logOrderCombo);
-    logPartForm->addRow("Part:", logPartCombo);
-    logPartForm->addRow("Quantity:", logQtySpin);
-    logPartForm->addRow("", logPartBtn);
-
-    QGroupBox* tableGroup = new QGroupBox("Inventory");
+    // --- Inventory Table ---
+    QGroupBox* tableGroup = new QGroupBox("Current Inventory");
     tableGroup->setStyleSheet(DASHBOARD_STYLE);
     QVBoxLayout* tableLayout = new QVBoxLayout(tableGroup);
-    tableLayout->setSpacing(8);
 
-    QPushButton* partsRefreshBtn = new QPushButton("Refresh Inventory");
+    QPushButton* refreshBtn = new QPushButton("Refresh Inventory");
+    QTableWidget* invTable = new QTableWidget();
+    invTable->setColumnCount(5);
+    invTable->setHorizontalHeaderLabels({ "ID", "Name", "Part Number", "Price", "Stock" });
+    invTable->horizontalHeader()->setStretchLastSection(true);
+    invTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    invTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-    QTableWidget* partsTable = new QTableWidget();
-    partsTable->setColumnCount(5);
-    partsTable->setHorizontalHeaderLabels({"ID", "Name", "Part Number", "Unit Price", "Stock Qty"});
-    partsTable->horizontalHeader()->setStretchLastSection(true);
-    partsTable->setSelectionBehavior(QAbstractItemView::SelectRows);
-    partsTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    tableLayout->addWidget(refreshBtn);
+    tableLayout->addWidget(invTable);
 
-    tableLayout->addWidget(partsRefreshBtn);
-    tableLayout->addWidget(partsTable, 1);
+    // --- Update Stock ---
+    QGroupBox* updateGroup = new QGroupBox("Update Stock Quantity");
+    updateGroup->setStyleSheet(DASHBOARD_STYLE);
+    QFormLayout* updateForm = new QFormLayout(updateGroup);
 
-    QHBoxLayout* topLayout = new QHBoxLayout();
-    topLayout->addWidget(addPartGroup);
-    topLayout->addWidget(stockGroup);
-    topLayout->addWidget(logPartGroup);
+    QLineEdit* updatePartNumberEdit = new QLineEdit();
+    updatePartNumberEdit->setPlaceholderText("Enter Part Number");
+    QSpinBox* updateQtySpin = new QSpinBox();
+    updateQtySpin->setRange(0, 10000);
 
-    mainLayout->addLayout(topLayout);
+    QPushButton* updateBtn = new QPushButton("Update Stock");
+    updateBtn->setObjectName("warningBtn");
+
+    updateForm->addRow("Part Number:", updatePartNumberEdit);
+    updateForm->addRow("New Quantity:", updateQtySpin);
+    updateForm->addRow("", updateBtn);
+
+    // --- Layout ---
+    mainLayout->addWidget(addPartGroup);
     mainLayout->addWidget(tableGroup, 1);
+    mainLayout->addWidget(updateGroup);
 
-    connect(addPartBtn, &QPushButton::clicked, this, [this, partNameEdit, partNumberEdit, partPriceSpin, partQtySpin, partsTable, stockPartCombo, logPartCombo]() {
+    // --- Connections ---
+    connect(addPartBtn, &QPushButton::clicked, this, [this, partNameEdit, partNumberEdit, partPriceSpin, partQtySpin, invTable]() {
         std::string name = partNameEdit->text().toStdString();
-        std::string partNum = partNumberEdit->text().toStdString();
+        std::string number = partNumberEdit->text().toStdString();
         double price = partPriceSpin->value();
         int qty = partQtySpin->value();
-        if (name.empty() || partNum.empty()) { showError("Validation Error", "Part name and number are required."); return; }
-        InventoryRepository repo;
-        if (repo.addPart(name, partNum, price, qty)) {
+
+        if (name.empty() || number.empty()) { showError("Validation Error", "Name and Part Number are required."); return; }
+
+        PartRepository repo;
+        if (repo.addPart(name, number, price, qty)) {
             showInfo("Success", "Part added successfully!");
             partNameEdit->clear(); partNumberEdit->clear(); partPriceSpin->setValue(0); partQtySpin->setValue(0);
-            refreshPartsTable(partsTable);
-            populatePartCombo(stockPartCombo); populatePartCombo(logPartCombo);
-        } else { showError("Error", "Failed to add part. Part number may already exist."); }
-    });
+            refreshInventoryTable(invTable);
+        }
+        else { showError("Error", "Failed to add part. Part number may already exist."); }
+        });
 
-    connect(updateStockBtn, &QPushButton::clicked, this, [this, stockPartCombo, newStockSpin, partsTable]() {
-        int partId = stockPartCombo->currentData().toInt();
-        int newQty = newStockSpin->value();
-        if (partId <= 0) { showError("Validation Error", "Please select a part."); return; }
-        InventoryRepository repo;
-        if (repo.updatePartStock(partId, newQty)) {
-            showInfo("Success", "Stock quantity updated!");
-            refreshPartsTable(partsTable);
-        } else { showError("Error", "Failed to update stock."); }
-    });
+    connect(updateBtn, &QPushButton::clicked, this, [this, updatePartNumberEdit, updateQtySpin, invTable]() {
+        std::string number = updatePartNumberEdit->text().toStdString();
+        int qty = updateQtySpin->value();
 
-    connect(logPartBtn, &QPushButton::clicked, this, [this, logOrderCombo, logPartCombo, logQtySpin, partsTable]() {
-        int orderId = logOrderCombo->currentData().toInt();
-        int partId = logPartCombo->currentData().toInt();
-        int qty = logQtySpin->value();
-        if (orderId <= 0 || partId <= 0 || qty <= 0) { showError("Validation Error", "Please select order, part and quantity."); return; }
-        InventoryRepository repo;
-        if (repo.consumePartForOrder(orderId, partId, qty)) {
-            showInfo("Success", "Part usage logged successfully!");
-            refreshPartsTable(partsTable);
-        } else { showError("Error", "Failed to log part usage. Check stock availability."); }
-    });
+        if (number.empty()) { showError("Validation Error", "Part Number is required."); return; }
 
-    connect(partsRefreshBtn, &QPushButton::clicked, this, [this, partsTable, stockPartCombo, logPartCombo]() {
-        refreshPartsTable(partsTable);
-        populatePartCombo(stockPartCombo); populatePartCombo(logPartCombo);
-    });
+        PartRepository repo;
+        if (repo.updateStock(number, qty)) {
+            showInfo("Success", "Stock updated successfully!");
+            refreshInventoryTable(invTable);
+        }
+        else { showError("Error", "Failed to update stock. Part not found."); }
+        });
 
-    refreshPartsTable(partsTable);
+    connect(refreshBtn, &QPushButton::clicked, this, [this, invTable]() {
+        refreshInventoryTable(invTable);
+        });
+
+    refreshInventoryTable(invTable);
     return panel;
 }
+void MainWindow::refreshInventoryTable(QTableWidget* table) {
+    PartRepository repo;
+    auto parts = repo.getAllParts();
+
+    table->setRowCount(parts.size());
+    for (size_t i = 0; i < parts.size(); i++) {
+        table->setItem(i, 0, new QTableWidgetItem(QString::number(parts[i].id)));
+        table->setItem(i, 1, new QTableWidgetItem(QString::fromStdString(parts[i].name)));
+        table->setItem(i, 2, new QTableWidgetItem(QString::fromStdString(parts[i].partNumber)));
+        table->setItem(i, 3, new QTableWidgetItem(QString::number(parts[i].price, 'f', 2)));
+        table->setItem(i, 4, new QTableWidgetItem(QString::number(parts[i].stockQty)));
+    }
+}
+
 
 // ============================================================================
 // BILLING PANEL
