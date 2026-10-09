@@ -8,17 +8,13 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
+# 1. Find Qt6
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
-# ==============================================================================
-# EXACT POSTGRESQL PATH ON YOUR DESKTOP
-# ==============================================================================
-set(PG_PATH "C:/Users/ahmme/OneDrive/Desktop/SQL")
+# 2. Find PostgreSQL (Automatically finds the correct paths on Ubuntu)
+find_package(PostgreSQL REQUIRED)
 
-include_directories("${PG_PATH}/include")
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
-link_directories("${PG_PATH}/lib")
-
+# 3. Define the executable
 add_executable(VehicleServiceCenterGUI
     main.cpp
     mainwindow.cpp
@@ -26,7 +22,11 @@ add_executable(VehicleServiceCenterGUI
     vehicle_service_center.hpp
 )
 
+# 4. Tell the compiler where the PostgreSQL headers (libpq-fe.h) are
+target_include_directories(VehicleServiceCenterGUI PRIVATE ${PostgreSQL_INCLUDE_DIRS})
+
+# 5. Link the libraries
 target_link_libraries(VehicleServiceCenterGUI PRIVATE
     Qt6::Widgets
-    "${PG_PATH}/lib/libpq.lib"
+    ${PostgreSQL_LIBRARIES}
 )

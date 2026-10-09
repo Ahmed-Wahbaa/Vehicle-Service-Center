@@ -263,24 +263,42 @@ public:
         return users;
     }
 };
-
 // ============================================================================
 // MEMBER 3: Customer & Vehicle Registry
 // ============================================================================
 class CustomerRepository {
 public:
-    bool addCustomer(const std::string& name, const std::string& phone, const std::string& email = "") {
+    // Returns std::nullopt on success, or a specific error message string on failure.
+    static std::optional<std::string> addCustomer(const std::string& name, const std::string& phone, const std::string& email = "") {
+        // 1. VALIDATION: Satisfies "Leave name empty and click Add — should show validation error"
+        if (name.empty() || phone.empty()) {
+            return "Validation Error: Name and Phone number are required.";
+        }
+
         PGconn* conn = DatabaseManager::getInstance()->getConnection();
         const char* query = "INSERT INTO customers (name, phone, email) VALUES ($1, $2, $3);";
         const char* paramValues[3] = { name.c_str(), phone.c_str(), email.c_str() };
 
         PGresult* res = PQexecParams(conn, query, 3, NULL, paramValues, NULL, NULL, 0);
-        bool success = (PQresultStatus(res) == PGRES_COMMAND_OK);
+        
+        if (PQresultStatus(res) != PGRES_COMMAND_OK) {
+            // 2. DUPLICATE PREVENTION: Catch PostgreSQL unique_violation (SQLSTATE 23505)
+            const char* sqlstate = PQresultErrorField(res, PG_DIAG_SQLSTATE);
+            if (sqlstate && std::string(sqlstate) == "23505") {
+                PQclear(res);
+                return "Error: A customer with this phone number already exists.";
+            }
+            // Fallback for other DB errors
+            std::string error = PQerrorMessage(conn);
+            PQclear(res);
+            return "Database error: " + error;
+        }
+        
         PQclear(res);
-        return success;
+        return std::nullopt; // Success
     }
 
-    std::vector<Customer> getAllCustomers() {
+    static std::vector<Customer> getAllCustomers() {
         std::vector<Customer> list;
         PGconn* conn = DatabaseManager::getInstance()->getConnection();
         const char* query = "SELECT id, name, phone, email FROM customers ORDER BY name;";
@@ -294,10 +312,10 @@ public:
         return list;
     }
 
-    std::vector<Customer> searchCustomers(const std::string& query) {
+    static std::vector<Customer> searchCustomers(const std::string& searchTerm) {
         std::vector<Customer> list;
         PGconn* conn = DatabaseManager::getInstance()->getConnection();
-        std::string q = "%" + query + "%";
+        std::string q = "%" + searchTerm + "%";
         const char* sql = "SELECT id, name, phone, email FROM customers WHERE name ILIKE $1 OR phone ILIKE $1 OR email ILIKE $1 ORDER BY name;";
         const char* paramValues[1] = { q.c_str() };
         PGresult* res = PQexecParams(conn, sql, 1, NULL, paramValues, NULL, NULL, 0);
@@ -313,7 +331,13 @@ public:
 
 class VehicleRepository {
 public:
-    bool addVehicle(int customerId, const std::string& plate, const std::string& make, const std::string& model, int year) {
+    // Returns std::nullopt on success, or a specific error message string on failure.
+    static std::optional<std::string> addVehicle(int customerId, const std::string& plate, const std::string& make, const std::string& model, int year) {
+        // VALIDATION
+        if (plate.empty() || make.empty() || model.empty()) {
+            return "Validation Error: License Plate, Make, and Model are required.";
+        }
+
         PGconn* conn = DatabaseManager::getInstance()->getConnection();
         std::string custIdStr = std::to_string(customerId);
         std::string yearStr = std::to_string(year);
@@ -322,12 +346,23 @@ public:
         const char* paramValues[5] = { custIdStr.c_str(), plate.c_str(), make.c_str(), model.c_str(), yearStr.c_str() };
 
         PGresult* res = PQexecParams(conn, query, 5, NULL, paramValues, NULL, NULL, 0);
-        bool success = (PQresultStatus(res) == PGRES_COMMAND_OK);
+        
+        if (PQresultStatus(res) != PGRES_COMMAND_OK) {
+            const char* sqlstate = PQresultErrorField(res, PG_DIAG_SQLSTATE);
+            if (sqlstate && std::string(sqlstate) == "23505") {
+                PQclear(res);
+                return "Error: A vehicle with this license plate already exists.";
+            }
+            std::string error = PQerrorMessage(conn);
+            PQclear(res);
+            return "Database error: " + error;
+        }
+        
         PQclear(res);
-        return success;
+        return std::nullopt; // Success
     }
 
-    std::vector<Vehicle> getAllVehicles() {
+    static std::vector<Vehicle> getAllVehicles() {
         std::vector<Vehicle> list;
         PGconn* conn = DatabaseManager::getInstance()->getConnection();
         const char* query = "SELECT v.id, v.customer_id, v.license_plate, v.make, v.model, v.year, c.name "
@@ -342,7 +377,7 @@ public:
         return list;
     }
 
-    std::vector<Vehicle> getVehiclesByCustomer(int customerId) {
+    static std::vector<Vehicle> getVehiclesByCustomer(int customerId) {
         std::vector<Vehicle> list;
         PGconn* conn = DatabaseManager::getInstance()->getConnection();
         std::string cIdStr = std::to_string(customerId);
@@ -359,6 +394,7 @@ public:
         return list;
     }
 };
+
 
 // ============================================================================
 // MEMBER 4: Appointment Scheduling System
