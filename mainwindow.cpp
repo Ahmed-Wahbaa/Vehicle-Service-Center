@@ -599,27 +599,39 @@ QWidget* MainWindow::createCustomersPanel() {
     vehTableLayout->addWidget(vehTable, 1);
 
     // --- Layout ---
-    QHBoxLayout* topLayout = new QHBoxLayout();
+     QHBoxLayout* topLayout = new QHBoxLayout();
     topLayout->addWidget(custGroup);
     topLayout->addWidget(vehGroup);
 
     mainLayout->addLayout(topLayout);
-    mainLayout->addWidget(custTableGroup);
-    mainLayout->addWidget(vehTableGroup, 1);
+    
+    // FIX: Add ', 1' to BOTH table groups so they split the vertical space equally
+    mainLayout->addWidget(custTableGroup, 1); 
+    mainLayout->addWidget(vehTableGroup, 1);  
+
+    refreshCustomersTable(custTable);
+    refreshVehiclesTable(vehTable);
 
     // --- Connections ---
-    connect(addCustBtn, &QPushButton::clicked, this, [this, custNameEdit, custPhoneEdit, custEmailEdit, custTable, vehCustomerCombo]() {
+        connect(addCustBtn, &QPushButton::clicked, this, [this, custNameEdit, custPhoneEdit, custEmailEdit, custTable, vehCustomerCombo]() {
         std::string name = custNameEdit->text().toStdString();
         std::string phone = custPhoneEdit->text().toStdString();
         std::string email = custEmailEdit->text().toStdString();
-        if (name.empty() || phone.empty()) { showError("Validation Error", "Name and Phone are required."); return; }
-        CustomerRepository repo;
-        if (repo.addCustomer(name, phone, email)) {
+        
+        // Call the static backend method (no need to instantiate the repo)
+        auto result = CustomerRepository::addCustomer(name, phone, email);
+        
+        if (!result) { // std::nullopt means success
             showInfo("Success", "Customer added successfully!");
-            custNameEdit->clear(); custPhoneEdit->clear(); custEmailEdit->clear();
+            custNameEdit->clear(); 
+            custPhoneEdit->clear(); 
+            custEmailEdit->clear();
             refreshCustomersTable(custTable);
             populateCustomerCombo(vehCustomerCombo);
-        } else { showError("Error", "Failed to add customer. Phone may already exist."); }
+        } else { 
+            // result.value() contains the exact error string from the backend
+            showError("Error", QString::fromStdString(result.value())); 
+        }
     });
 
     connect(addVehBtn, &QPushButton::clicked, this, [this, vehCustomerCombo, vehPlateEdit, vehMakeEdit, vehModelEdit, vehYearSpin, vehTable]() {
@@ -628,15 +640,21 @@ QWidget* MainWindow::createCustomersPanel() {
         std::string make = vehMakeEdit->text().toStdString();
         std::string model = vehModelEdit->text().toStdString();
         int year = vehYearSpin->value();
-        if (customerId <= 0 || plate.empty() || make.empty() || model.empty()) { showError("Validation Error", "All vehicle fields are required."); return; }
-        VehicleRepository repo;
-        if (repo.addVehicle(customerId, plate, make, model, year)) {
+        
+        // Call the static backend method
+        auto result = VehicleRepository::addVehicle(customerId, plate, make, model, year);
+        
+        if (!result) { // std::nullopt means success
             showInfo("Success", "Vehicle added successfully!");
-            vehPlateEdit->clear(); vehMakeEdit->clear(); vehModelEdit->clear();
+            vehPlateEdit->clear(); 
+            vehMakeEdit->clear(); 
+            vehModelEdit->clear();
             refreshVehiclesTable(vehTable);
-        } else { showError("Error", "Failed to add vehicle. License plate may already exist."); }
+        } else { 
+            // result.value() contains the exact error string from the backend
+            showError("Error", QString::fromStdString(result.value())); 
+        }
     });
-
     connect(custSearchBtn, &QPushButton::clicked, this, [this, custSearchEdit, custTable]() {
         std::string query = custSearchEdit->text().toStdString();
         CustomerRepository repo;
@@ -815,7 +833,6 @@ QWidget* MainWindow::createServiceOrdersPanel() {
     QComboBox* orderMechanicCombo = new QComboBox();
     populateMechanicCombo(orderMechanicCombo);
     QTextEdit* orderNotesEdit = new QTextEdit();
-    orderNotesEdit->setMaximumHeight(80);
     orderNotesEdit->setPlaceholderText("Enter service notes...");
 
     QPushButton* createOrderBtn = new QPushButton("Create Service Order");
